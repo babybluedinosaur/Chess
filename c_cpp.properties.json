@@ -1,0 +1,10 @@
+"configurations": [
+    {
+        "name": "Linux",
+        "includePath": [
+            "${workspaceFolder}/**",
+            "/usr/include/SDL2" // Add this line with the correct path to SDL2 headers
+        ],
+        // Other configurations...
+    }
+]
