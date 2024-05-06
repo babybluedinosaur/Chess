@@ -1,10 +1,24 @@
-"configurations": [
-    {
-        "name": "Linux",
-        "includePath": [
-            "${workspaceFolder}/**",
-            "/usr/include/SDL2" // Add this line with the correct path to SDL2 headers
-        ],
-        // Other configurations...
-    }
-]
+{
+    "configurations": [
+        {
+            "name": "Linux",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "/usr/include/SDL2"
+            ],
+            "browse": {
+                "path": [
+                    "${workspaceFolder}",
+                    "/usr/include/SDL2"
+                ],
+                "limitSymbolsToIncludedHeaders": true
+            },
+            "compilerPath": "/usr/bin/gcc",
+            "cStandard": "c11",
+            "cppStandard": "c++17",
+            "intelliSenseMode": "gcc-x64"
+        }
+    ],
+    "version": 4
+}
+
