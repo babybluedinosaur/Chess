@@ -1,5 +1,10 @@
 #include <SDL2/SDL.h>
 
+const int WINDOW_WIDTH = 640;
+const int WINDOW_HEIGHT = 640;
+const int GRID_SIZE = 80; // Adjust the grid size as needed
+const SDL_Color GRID_COLOR = { 100, 100, 100, 255 }; // Adjust the grid color a
+
 int main(int argc, char* argv[]) {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -9,7 +14,7 @@ int main(int argc, char* argv[]) {
 
     // Create a window
     SDL_Window* window = SDL_CreateWindow("SDL GUI Window", SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED, 640, 480, 0);
+                                          SDL_WINDOWPOS_CENTERED, 640, 640, 0);
     if (!window) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         return 1;
@@ -23,7 +28,21 @@ int main(int argc, char* argv[]) {
             if (event.type == SDL_QUIT) {
                 quit = true;
             }
+        } // Rendering code
+        SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255); // Set background color to white
+        SDL_RenderClear(renderer); // Clear the renderer with white color
+
+        // Draw grid
+        SDL_SetRenderDrawColor(renderer, GRID_COLOR.r, GRID_COLOR.g, GRID_COLOR.b, GRID_COLOR.a);
+        for (int x = 0; x < WINDOW_HEIGHT; x += GRID_SIZE) {
+            SDL_RenderDrawLine(renderer, x, 0, x, WINDOW_HEIGHT); // Vertical lines
         }
+        for (int y = 0; y < WINDOW_WIDTH; y += GRID_SIZE) {
+            SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
+        }
+
+        SDL_RenderPresent(renderer); // Update the window
 
         // Render code can be added here
     }
