@@ -4,6 +4,9 @@ const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 640;
 const int GRID_SIZE = 80; // Adjust the grid size as needed
 const SDL_Color GRID_COLOR = { 100, 100, 100, 255 }; // Adjust the grid color a
+const SDL_Color FIELD_COLOR = { 255, 0, 0, 255 }; // Adjust the color of the field
+const SDL_Color ALT_FIELD_COLOR = { 0, 255, 0, 255 }; // Adjust the color of the alternate field
+
 
 int main(int argc, char* argv[]) {
     // Initialize SDL
@@ -40,6 +43,15 @@ int main(int argc, char* argv[]) {
         }
         for (int y = 0; y < WINDOW_WIDTH; y += GRID_SIZE) {
             SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
+        }
+
+        for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
+            for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
+                SDL_Rect fieldRect = { x, y, GRID_SIZE, GRID_SIZE };
+                SDL_Color fillColor = ((x / GRID_SIZE) + (y / GRID_SIZE)) % 2 == 0 ? FIELD_COLOR : ALT_FIELD_COLOR;
+                SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+                SDL_RenderFillRect(renderer, &fieldRect);
+            }
         }
 
         SDL_RenderPresent(renderer); // Update the window
