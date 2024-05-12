@@ -1,4 +1,5 @@
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_ttf.h>
 
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 640;
@@ -56,6 +57,7 @@ int main(int argc, char* argv[]) {
                  }
                 SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
                 SDL_RenderFillRect(renderer, &fieldRect);
+                
             }
         }
 

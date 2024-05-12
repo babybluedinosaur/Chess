@@ -10,7 +10,9 @@
                 "${file}",
                 "-o",
                 "${fileDirname}/${fileBasenameNoExtension}.out",
-                "-lSDL2" // Link against SDL2 library
+                "-lSDL2",
+                "-lSDL2_ttf",
+                "-L/usr/lib/x86_64-linux-gnu"
             ],
             "options": {
                 "cwd": "${fileDirname}"
