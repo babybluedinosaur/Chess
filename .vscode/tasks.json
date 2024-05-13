@@ -12,7 +12,8 @@
                 "${fileDirname}/${fileBasenameNoExtension}.out",
                 "-lSDL2",
                 "-lSDL2_ttf",
-                "-L/usr/lib/x86_64-linux-gnu"
+                "-L/usr/lib/x86_64-linux-gnu",
+                "-lstdc++"
             ],
             "options": {
                 "cwd": "${fileDirname}"
