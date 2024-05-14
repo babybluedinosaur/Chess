@@ -43,7 +43,7 @@ int main(int argc, char* argv[]) {
     }
 
     // Load the font
-    TTF_Font* font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 24);
+    TTF_Font* font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
     if (!font) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
         SDL_DestroyRenderer(renderer);
@@ -76,31 +76,53 @@ int main(int argc, char* argv[]) {
             SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
         }
 
-        int foo = 1;
+        int foo = 8;
+        int bruh = 0;
 
         // Render text in each grid cell
         for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
             for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
                 SDL_Rect fieldRect = { x, y, GRID_SIZE, GRID_SIZE };
-                SDL_Color fillColor = ((x / GRID_SIZE) + (y / GRID_SIZE)) % 2 == 0 ? FIELD_COLOR : ALT_FIELD_COLOR;
+                SDL_Color fillColor;
+                SDL_Color textColor;
+                if (((x / GRID_SIZE) + (y / GRID_SIZE)) % 2 == 0) {
+                    fillColor = FIELD_COLOR;
+                    textColor = ALT_FIELD_COLOR;
+                } else {
+                    fillColor = ALT_FIELD_COLOR;
+                    textColor = FIELD_COLOR;
+                }
                 SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
                 SDL_RenderFillRect(renderer, &fieldRect);
 
-                // Render text
-                SDL_Color textColor = { 255, 255, 255, 255 }; // White color for the text
-                if (y == WINDOW_HEIGHT-GRID_SIZE) {
-                    std::string text = std::to_string(foo); // Convert integer to string
-                    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor); // "1" is the index, replace as needed
+                // Render row index
+                if (x == 0) {
+                    std::string text = std::to_string(foo); 
+                    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor); 
                     SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-                    int indexX = x + GRID_SIZE - 20; // Adjust as needed for positioning
-                    int indexY = y + GRID_SIZE - 20;
+                    int indexX = x + GRID_SIZE - 80;
+                    int indexY = y + GRID_SIZE - 80;
                     SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
                     SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
                     SDL_FreeSurface(textSurface);
                     SDL_DestroyTexture(textTexture);
+                    foo--;
+                }
+
+                // Render column char
+                char* chars[] = {"a","b","c","d","e","f","g","h"};
+                if (y == WINDOW_HEIGHT-GRID_SIZE) {
+                    SDL_Surface* textSurface = TTF_RenderText_Solid(font, chars[bruh], textColor); 
+                    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                    int indexX = x + GRID_SIZE - 20;
+                    int indexY = y + GRID_SIZE - 25;
+                    SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
+                    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+                    SDL_FreeSurface(textSurface);
+                    SDL_DestroyTexture(textTexture);
+                    bruh++;
                 }
             }
-            foo++;
         }
 
         // Update the window
