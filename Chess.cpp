@@ -8,6 +8,87 @@ const int GRID_SIZE = 80;
 const SDL_Color GRID_COLOR = { 100, 100, 100, 255 }; // Adjust the grid color
 const SDL_Color FIELD_COLOR = { 0, 0, 0, 0 }; // Adjust the color of the field
 const SDL_Color ALT_FIELD_COLOR = { 255, 255, 255, 0 }; // Adjust the color of the alternate field
+SDL_Window* window;
+SDL_Renderer* renderer;
+TTF_Font* font;
+
+
+void build_board(SDL_Window* window, SDL_Renderer* renderer) {
+
+    // Load the font
+    font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
+    if (!font) {
+        SDL_Log("Failed to load font: %s", TTF_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        TTF_Quit();
+        SDL_Quit();
+    }
+    // Clear the renderer
+    SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
+    SDL_RenderClear(renderer);
+
+    // Draw grid
+    SDL_SetRenderDrawColor(renderer, GRID_COLOR.r, GRID_COLOR.g, GRID_COLOR.b, GRID_COLOR.a);
+    for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
+        SDL_RenderDrawLine(renderer, x, 0, x, WINDOW_HEIGHT); // Vertical lines
+    }
+    for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
+        SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
+    }
+
+    int foo = 8;
+    int bruh = 0;
+
+    // Render text in each grid cell
+    for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
+        for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
+            SDL_Rect fieldRect = { x, y, GRID_SIZE, GRID_SIZE };
+            SDL_Color fillColor;
+            SDL_Color textColor;
+            if (((x / GRID_SIZE) + (y / GRID_SIZE)) % 2 == 0) {
+                fillColor = FIELD_COLOR;
+                textColor = ALT_FIELD_COLOR;
+            } else {
+                fillColor = ALT_FIELD_COLOR;
+                textColor = FIELD_COLOR;
+            }
+            SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
+            SDL_RenderFillRect(renderer, &fieldRect);
+
+            // Render row index
+            if (x == 0) {
+                std::string text = std::to_string(foo); 
+                SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor); 
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                int indexX = x + GRID_SIZE - 80;
+                int indexY = y + GRID_SIZE - 80;
+                SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
+                SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+                SDL_FreeSurface(textSurface);
+                SDL_DestroyTexture(textTexture);
+                foo--;
+            }
+
+            // Render column char
+            char* chars[] = {"a","b","c","d","e","f","g","h"};
+            if (y == WINDOW_HEIGHT-GRID_SIZE) {
+                SDL_Surface* textSurface = TTF_RenderText_Solid(font, chars[bruh], textColor); 
+                SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
+                int indexX = x + GRID_SIZE - 20;
+                int indexY = y + GRID_SIZE - 25;
+                SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
+                SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
+                SDL_FreeSurface(textSurface);
+                SDL_DestroyTexture(textTexture);
+                bruh++;
+            }
+        }
+    }
+
+    // Update the window
+    SDL_RenderPresent(renderer);
+}
 
 int main(int argc, char* argv[]) {
     // Initialize SDL
@@ -42,17 +123,6 @@ int main(int argc, char* argv[]) {
         return 1;
     }
 
-    // Load the font
-    TTF_Font* font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
-    if (!font) {
-        SDL_Log("Failed to load font: %s", TTF_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        TTF_Quit();
-        SDL_Quit();
-        return 1;
-    }
-
     // Event loop
     bool quit = false;
     while (!quit) {
@@ -63,77 +133,26 @@ int main(int argc, char* argv[]) {
             }
         }
 
-        // Clear the renderer
-        SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
-        SDL_RenderClear(renderer);
-
-        // Draw grid
-        SDL_SetRenderDrawColor(renderer, GRID_COLOR.r, GRID_COLOR.g, GRID_COLOR.b, GRID_COLOR.a);
-        for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
-            SDL_RenderDrawLine(renderer, x, 0, x, WINDOW_HEIGHT); // Vertical lines
-        }
-        for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
-            SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
-        }
-
-        int foo = 8;
-        int bruh = 0;
-
-        // Render text in each grid cell
-        for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
-            for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
-                SDL_Rect fieldRect = { x, y, GRID_SIZE, GRID_SIZE };
-                SDL_Color fillColor;
-                SDL_Color textColor;
-                if (((x / GRID_SIZE) + (y / GRID_SIZE)) % 2 == 0) {
-                    fillColor = FIELD_COLOR;
-                    textColor = ALT_FIELD_COLOR;
-                } else {
-                    fillColor = ALT_FIELD_COLOR;
-                    textColor = FIELD_COLOR;
-                }
-                SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
-                SDL_RenderFillRect(renderer, &fieldRect);
-
-                // Render row index
-                if (x == 0) {
-                    std::string text = std::to_string(foo); 
-                    SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor); 
-                    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-                    int indexX = x + GRID_SIZE - 80;
-                    int indexY = y + GRID_SIZE - 80;
-                    SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
-                    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-                    SDL_FreeSurface(textSurface);
-                    SDL_DestroyTexture(textTexture);
-                    foo--;
-                }
-
-                // Render column char
-                char* chars[] = {"a","b","c","d","e","f","g","h"};
-                if (y == WINDOW_HEIGHT-GRID_SIZE) {
-                    SDL_Surface* textSurface = TTF_RenderText_Solid(font, chars[bruh], textColor); 
-                    SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
-                    int indexX = x + GRID_SIZE - 20;
-                    int indexY = y + GRID_SIZE - 25;
-                    SDL_Rect textRect = { indexX, indexY, textSurface->w, textSurface->h };
-                    SDL_RenderCopy(renderer, textTexture, NULL, &textRect);
-                    SDL_FreeSurface(textSurface);
-                    SDL_DestroyTexture(textTexture);
-                    bruh++;
-                }
-            }
-        }
-
-        // Update the window
-        SDL_RenderPresent(renderer);
+       build_board(window, renderer);
     }
 
     // Cleanup
-    TTF_CloseFont(font);
+    if (font) {
+        TTF_CloseFont(font);
+        font = nullptr;
+    }
     TTF_Quit();
-    SDL_DestroyRenderer(renderer);
-    SDL_DestroyWindow(window);
+    
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = nullptr; 
+    }
+
     SDL_Quit();
     return 0;
 }
