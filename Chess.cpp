@@ -15,6 +15,7 @@ TTF_Font* font;
 
 void build_board(SDL_Window* window, SDL_Renderer* renderer) {
 
+
     // Load the font
     font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
     if (!font) {
@@ -90,7 +91,7 @@ void build_board(SDL_Window* window, SDL_Renderer* renderer) {
     SDL_RenderPresent(renderer);
 }
 
-int main(int argc, char* argv[]) {
+int init () {
     // Initialize SDL
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
         SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
@@ -122,7 +123,12 @@ int main(int argc, char* argv[]) {
         SDL_Quit();
         return 1;
     }
+    
+}
 
+int main(int argc, char* argv[]) {
+    init();
+    
     // Event loop
     bool quit = false;
     while (!quit) {
