@@ -1,22 +1,62 @@
-#include <SDL2/SDL.h>
-#include <SDL2/SDL_ttf.h>
-#include <string>
+#include "Chess.hpp"
 
-const int WINDOW_WIDTH = 640;
-const int WINDOW_HEIGHT = 640;
-const int GRID_SIZE = 80; 
-const SDL_Color GRID_COLOR = { 100, 100, 100, 255 }; // Adjust the grid color
-const SDL_Color FIELD_COLOR = { 0, 0, 0, 0 }; // Adjust the color of the field
-const SDL_Color ALT_FIELD_COLOR = { 255, 255, 255, 0 }; // Adjust the color of the alternate field
-SDL_Window* window;
-SDL_Renderer* renderer;
-TTF_Font* font;
+SDL_Window* window = nullptr;
+SDL_Renderer* renderer = nullptr;
+TTF_Font* font = nullptr;
 
+bool initializeSDL() {
+    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
+        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
+        return false;
+    }
 
-void build_board(SDL_Window* window, SDL_Renderer* renderer) {
+    window = SDL_CreateWindow("SDL GUI Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    if (!window) {
+        SDL_Log("Failed to create window: %s", SDL_GetError());
+        SDL_Quit();
+        return false;
+    }
 
+    renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+    if (!renderer) {
+        SDL_Log("Failed to create renderer: %s", SDL_GetError());
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return false;
+    }
 
-    // Load the font
+    if (TTF_Init() != 0) {
+        SDL_Log("Unable to initialize SDL_ttf: %s", TTF_GetError());
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_Quit();
+        return false;
+    }
+
+    return true;
+}
+
+void closeSDL() {
+    if (font) {
+        TTF_CloseFont(font);
+        font = nullptr;
+    }
+    TTF_Quit();
+
+    if (renderer) {
+        SDL_DestroyRenderer(renderer);
+        renderer = nullptr;
+    }
+
+    if (window) {
+        SDL_DestroyWindow(window);
+        window = nullptr;
+    }
+
+    SDL_Quit();
+}
+
+void buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
     font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
     if (!font) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
@@ -24,24 +64,23 @@ void build_board(SDL_Window* window, SDL_Renderer* renderer) {
         SDL_DestroyWindow(window);
         TTF_Quit();
         SDL_Quit();
+        return;
     }
-    // Clear the renderer
+
     SDL_SetRenderDrawColor(renderer, 255, 255, 255, 255);
     SDL_RenderClear(renderer);
 
-    // Draw grid
     SDL_SetRenderDrawColor(renderer, GRID_COLOR.r, GRID_COLOR.g, GRID_COLOR.b, GRID_COLOR.a);
     for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
-        SDL_RenderDrawLine(renderer, x, 0, x, WINDOW_HEIGHT); // Vertical lines
+        SDL_RenderDrawLine(renderer, x, 0, x, WINDOW_HEIGHT);
     }
     for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
-        SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y); // Horizontal lines
+        SDL_RenderDrawLine(renderer, 0, y, WINDOW_WIDTH, y);
     }
 
     int foo = 8;
     int bruh = 0;
 
-    // Render text in each grid cell
     for (int x = 0; x < WINDOW_WIDTH; x += GRID_SIZE) {
         for (int y = 0; y < WINDOW_HEIGHT; y += GRID_SIZE) {
             SDL_Rect fieldRect = { x, y, GRID_SIZE, GRID_SIZE };
@@ -57,10 +96,9 @@ void build_board(SDL_Window* window, SDL_Renderer* renderer) {
             SDL_SetRenderDrawColor(renderer, fillColor.r, fillColor.g, fillColor.b, fillColor.a);
             SDL_RenderFillRect(renderer, &fieldRect);
 
-            // Render row index
             if (x == 0) {
-                std::string text = std::to_string(foo); 
-                SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor); 
+                std::string text = std::to_string(foo);
+                SDL_Surface* textSurface = TTF_RenderText_Solid(font, text.c_str(), textColor);
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
                 int indexX = x + GRID_SIZE - 80;
                 int indexY = y + GRID_SIZE - 80;
@@ -71,10 +109,9 @@ void build_board(SDL_Window* window, SDL_Renderer* renderer) {
                 foo--;
             }
 
-            // Render column char
-            char* chars[] = {"a","b","c","d","e","f","g","h"};
-            if (y == WINDOW_HEIGHT-GRID_SIZE) {
-                SDL_Surface* textSurface = TTF_RenderText_Solid(font, chars[bruh], textColor); 
+            const char* chars[] = {"a", "b", "c", "d", "e", "f", "g", "h"};
+            if (y == WINDOW_HEIGHT - GRID_SIZE) {
+                SDL_Surface* textSurface = TTF_RenderText_Solid(font, chars[bruh], textColor);
                 SDL_Texture* textTexture = SDL_CreateTextureFromSurface(renderer, textSurface);
                 int indexX = x + GRID_SIZE - 20;
                 int indexY = y + GRID_SIZE - 25;
@@ -87,78 +124,29 @@ void build_board(SDL_Window* window, SDL_Renderer* renderer) {
         }
     }
 
-    // Update the window
     SDL_RenderPresent(renderer);
 }
 
-int init () {
-    // Initialize SDL
-    if (SDL_Init(SDL_INIT_VIDEO) != 0) {
-        SDL_Log("Unable to initialize SDL: %s", SDL_GetError());
-        return 1;
+void handleEvents(bool& quit) {
+    SDL_Event event;
+    while (SDL_PollEvent(&event) != 0) {
+        if (event.type == SDL_QUIT) {
+            quit = true;
+        }
     }
-
-    // Create a window
-    SDL_Window* window = SDL_CreateWindow("SDL GUI Window", SDL_WINDOWPOS_CENTERED,
-                                          SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
-    if (!window) {
-        SDL_Log("Failed to create window: %s", SDL_GetError());
-        return 1;
-    }
-
-    // Create a renderer
-    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
-    if (!renderer) {
-        SDL_Log("Failed to create renderer: %s", SDL_GetError());
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-
-    // Initialize SDL_ttf
-    if (TTF_Init() != 0) {
-        SDL_Log("Unable to initialize SDL_ttf: %s", TTF_GetError());
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_Quit();
-        return 1;
-    }
-    
 }
 
 int main(int argc, char* argv[]) {
-    init();
-    
-    // Event loop
+    if (!initializeSDL()) {
+        return 1;
+    }
+
     bool quit = false;
     while (!quit) {
-        SDL_Event event;
-        while (SDL_PollEvent(&event)) {
-            if (event.type == SDL_QUIT) {
-                quit = true;
-            }
-        }
-
-       build_board(window, renderer);
+        handleEvents(quit);
+        buildBoard(window, renderer);
     }
 
-    // Cleanup
-    if (font) {
-        TTF_CloseFont(font);
-        font = nullptr;
-    }
-    TTF_Quit();
-    
-    if (renderer) {
-        SDL_DestroyRenderer(renderer);
-        renderer = nullptr;
-    }
-
-    if (window) {
-        SDL_DestroyWindow(window);
-        window = nullptr; 
-    }
-
-    SDL_Quit();
+    closeSDL();
     return 0;
 }
