@@ -15,10 +15,10 @@ private:
     SDL_Texture* image;
 
 public:
-    Pawn(bool color);
-    void setColor(bool color);
+    Pawn(bool color, int x, int y, SDL_Texture* image);
     void setCoordinates(int x, int y);
-    bool getColor();
+    bool getColor() const;
+    bool getCoordinates();
     void display() const;
 };
 

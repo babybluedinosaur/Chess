@@ -1,5 +1,6 @@
 #include "Chess.hpp"
 
+// Global variables
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 TTF_Font* font = nullptr;
