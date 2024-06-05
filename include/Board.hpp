@@ -12,6 +12,8 @@ private:
     Piece board[8][8];
 
 public:
+    Board();
+    void initializeBoard();
     void display() const;
 };
 
