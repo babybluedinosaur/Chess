@@ -1,23 +1,5 @@
 #include "include/Pawn.hpp"
 
-Pawn::Pawn(bool input_color, int input_x, int input_y, SDL_Texture* image)
-    :white(input_color), x(input_x), y(input_y), image(image) {
-    
-}
-
-void Pawn::setCoordinates(int input_x, int input_y) {
-    x  = input_x;
-    y = input_y;
-}
-
-bool Pawn::getColor() const {
-    return white;
-}
-    
-std::pair<int, int> Pawn::getCoordinates() {
-    return std::make_pair(x, y);
-}
-
-void Pawn::display() const {
-
+Pawn::Pawn(bool input_color, int x, int y,  SDL_Texture* image) : 
+    Piece(input_color, x, y, image){
 }

@@ -10,6 +10,7 @@ void Board::initializeBoard() {
     for (int x = 0; x < 8; x++) {
         for (int y = 0; y < 8; y++) {
             if (y==1) board[x][y] = Pawn(false, x, y, nullptr);
+            else if (y==6) board[x][y] = Pawn(true, x, y, nullptr);
         }
     }
 }

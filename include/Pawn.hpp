@@ -9,6 +9,8 @@
 #include "include/Piece.hpp"
 
 class Pawn : public Piece {
+    public:
+    Pawn(bool input_color, int x, int y,  SDL_Texture* image);
 };
 
 #endif 

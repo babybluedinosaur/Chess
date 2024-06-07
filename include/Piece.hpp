@@ -15,6 +15,7 @@ private:
     SDL_Texture* image;
 
 public:
+    Piece();
     Piece(bool input_color, int input_x, int input_y, SDL_Texture* image);
     void setCoordinates(int x, int y);
     bool getColor() const;

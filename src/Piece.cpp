@@ -1,5 +1,10 @@
 #include "include/Piece.hpp"
 
+
+Piece::Piece() {
+    
+}
+
 Piece::Piece(bool input_color, int input_x, int input_y, SDL_Texture* image)
     :white(input_color), x(input_x), y(input_y), image(image) {
     
