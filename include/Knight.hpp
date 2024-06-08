@@ -1,17 +1,16 @@
-#ifndef KNIGHT_HPP
-#define KNIGHT_HPP
+#ifndef PAWN_HPP
+#define PAWN_HPP
 
+#include <SDL2/SDL.h>
+#include <SDL2/SDL_image.h>
+#include <iostream>
 #include <string>
 
-class Knight {
-private:
-    bool white;
+#include "include/Piece.hpp"
 
-public:
-    Knight(bool color);
-    void setColor(bool color);
-    bool getColor();
-    void display() const;
+class Knight : public Piece {
+    public:
+    Knight(bool input_color, int x, int y,  SDL_Texture* image);
 };
 
 #endif 

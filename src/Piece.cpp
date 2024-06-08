@@ -2,7 +2,6 @@
 
 
 Piece::Piece() {
-    
 }
 
 Piece::Piece(bool input_color, int input_x, int input_y, SDL_Texture* image)
