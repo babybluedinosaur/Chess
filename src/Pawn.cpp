@@ -1,5 +1,5 @@
 #include "include/Pawn.hpp"
 
-Pawn::Pawn(bool input_color, int x, int y,  SDL_Texture* image) : 
-    Piece(input_color, x, y, image){
+Pawn::Pawn(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer) : 
+    Piece(input_color, input_x, input_y, path, renderer) {
 }

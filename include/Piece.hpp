@@ -12,11 +12,12 @@ private:
     bool white;
     int x;
     int y;
-    SDL_Texture* image;
+    SDL_Texture* image = nullptr;
 
 public:
     Piece();
-    Piece(bool input_color, int input_x, int input_y, SDL_Texture* image);
+    Piece(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
+    void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
     bool getColor() const;
     std::pair<int, int> getCoordinates();

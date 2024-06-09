@@ -10,7 +10,7 @@
 
 class Pawn : public Piece {
     public:
-    Pawn(bool input_color, int x, int y,  SDL_Texture* image);
+    Pawn(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
 };
 
 #endif 

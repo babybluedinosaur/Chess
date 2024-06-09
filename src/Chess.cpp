@@ -1,9 +1,10 @@
 #include "Chess.hpp"
 
-// Global variables
 SDL_Window* window = nullptr;
 SDL_Renderer* renderer = nullptr;
 TTF_Font* font = nullptr;
+
+//NOT IN USE
 
 bool initializeSDL() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {

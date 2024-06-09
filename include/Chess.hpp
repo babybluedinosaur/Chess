@@ -5,6 +5,8 @@
 #include <SDL2/SDL_ttf.h>
 #include <string>
 
+
+
 const int WINDOW_WIDTH = 640;
 const int WINDOW_HEIGHT = 640;
 const int GRID_SIZE = 80; 
