@@ -1,4 +1,4 @@
-#include "include/Piece.hpp"
+#include "Piece.hpp"
 
 
 Piece::Piece() {
@@ -22,7 +22,6 @@ void Piece::setImage(std::string path, SDL_Renderer* renderer) {
     }
     SDL_Rect renderQuad = { x, y, 64, 64 };
     SDL_RenderCopy(renderer, image, nullptr, &renderQuad);
-    SDL_RenderPresent(renderer);
 }
 
 void Piece::setCoordinates(int input_x, int input_y) {
@@ -33,11 +32,35 @@ void Piece::setCoordinates(int input_x, int input_y) {
 bool Piece::getColor() const {
     return white;
 }
+
+SDL_Texture* Piece::getImage() {
+    return image;
+}
     
 std::pair<int, int> Piece::getCoordinates() {
     return std::make_pair(x, y);
 }
 
-void Piece::display() const {
+SDL_Rect Piece::getSDLRect() {
+    std::pair<int,int> coordinates = getCoordinates();
+    return SDL_Rect{coordinates.first, coordinates.second, 64, 64};
+};
+
+
+int main() {
+    SDL_Window* window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
+Piece testPiece(false, 100, 100, "/home/sidar/Downloads/white_pawn.png", renderer);
+
+// Present the rendered frame
+SDL_RenderPresent(renderer);
+
+// Wait for a short while before quitting (for testing purposes)
+SDL_Delay(2000);
+
+// Cleanup
+SDL_DestroyRenderer(renderer);
+SDL_DestroyWindow(window);
 
 }

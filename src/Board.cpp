@@ -15,13 +15,7 @@ Board::Board() {
 }
 
 void Board::initializeBoard() {
-    for (int x = 0; x < 8; x++) {
-        for (int y = 0; y < 8; y++) {
-            //window is null
-            if (y==1) board[x][y] = Pawn(false, x, y,"/home/sidar/Downloads/white_pawn.png", SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
-            else if (y==6) board[x][y] =  Pawn(true, x, y,"/home/sidar/Downloads/white_pawn.png", SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED));
-        }
-    }       
+    Pawn(false, 1, 1,"/home/sidar/Downloads/white_pawn.png", renderer);    
 }
 
 bool Board::initializeSDL() {
@@ -144,13 +138,7 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
         }
     }
 
-    //start at 80
-    for (int x = 0; x < 8; x++) {
-        for (int y = 0; y < 8; y++) {
-            
-        }
-    }
-
+    Pawn huh = Pawn(true, 100, 100,"/home/sidar/Downloads/white_pawn.png", renderer);    
     SDL_RenderPresent(renderer);
 }
 

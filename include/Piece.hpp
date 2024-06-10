@@ -20,8 +20,9 @@ public:
     void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
     bool getColor() const;
+    SDL_Texture* getImage();
     std::pair<int, int> getCoordinates();
-    void display() const;
+    SDL_Rect getSDLRect();
 };
 
 #endif 
