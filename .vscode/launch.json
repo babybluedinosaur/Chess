@@ -5,7 +5,7 @@
             "name": "GCC Debug",
             "type": "cppdbg",
             "request": "launch",
-            "program": "${workspaceFolder}/Piece.out",
+            "program": "${workspaceFolder}/Board.out",
             "args": [],
             "stopAtEntry": false,
             "cwd": "${workspaceFolder}",

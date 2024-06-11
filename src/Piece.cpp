@@ -47,20 +47,17 @@ SDL_Rect Piece::getSDLRect() {
 };
 
 
-int main() {
-    SDL_Window* window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
-SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+// int main() {
+//     SDL_Window* window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
+// SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
 
-Piece testPiece(false, 100, 100, "/home/sidar/Downloads/white_pawn.png", renderer);
+// Piece testPiece(false, 100, 100, "/home/sidar/Downloads/white_pawn.png", renderer);
 
-// Present the rendered frame
-SDL_RenderPresent(renderer);
+// SDL_RenderPresent(renderer);
 
-// Wait for a short while before quitting (for testing purposes)
-SDL_Delay(2000);
+// SDL_Delay(2000);
 
-// Cleanup
-SDL_DestroyRenderer(renderer);
-SDL_DestroyWindow(window);
+// SDL_DestroyRenderer(renderer);
+// SDL_DestroyWindow(window);
 
-}
+// }

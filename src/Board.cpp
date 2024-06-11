@@ -1,4 +1,4 @@
-#include "include/Board.hpp"
+#include "Board.hpp"
 
 Board::Board() {
     initializeSDL();
@@ -9,9 +9,7 @@ Board::Board() {
         handleEvents(quit);
         buildBoard(window, renderer);
     }
-
     closeSDL();
-    buildBoard(window, renderer);
 }
 
 void Board::initializeBoard() {
@@ -137,8 +135,11 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
             }
         }
     }
-
-    Pawn huh = Pawn(true, 100, 100,"/home/sidar/Downloads/white_pawn.png", renderer);    
+    for (int x = 0; x < 8; x++) {
+        for (int y = 0; y < 8; y++) {
+            if (y == 6) board[x][y] = Pawn(false, 80*x, 480,"/home/sidar/Downloads/white_pawn.png", renderer);    
+        }
+    }
     SDL_RenderPresent(renderer);
 }
 

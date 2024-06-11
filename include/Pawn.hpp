@@ -6,7 +6,7 @@
 #include <iostream>
 #include <string>
 
-#include "include/Piece.hpp"
+#include "Piece.hpp"
 
 class Pawn : public Piece {
     public:
