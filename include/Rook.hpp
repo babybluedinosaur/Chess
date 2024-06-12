@@ -6,11 +6,11 @@
 #include <iostream>
 #include <string>
 
-#include "include/Piece.hpp"
+#include "Piece.hpp"
 
 class Rook : public Piece {
     public:
-    Rook(bool input_color, int x, int y,  SDL_Texture* image);
+    Rook(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
 };
 
 #endif 

@@ -1,5 +1,5 @@
-#include "include/Queen.hpp"
+#include "Queen.hpp"
 
-Queen::Queen(bool input_color, int x, int y,  SDL_Texture* image) : 
-    Queen(input_color, x, y, image){
+Queen::Queen(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer) : 
+    Piece(input_color, input_x, input_y, path, renderer) {
 }

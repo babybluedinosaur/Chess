@@ -21,8 +21,8 @@ private:
     const int WINDOW_HEIGHT = 640;
     const int GRID_SIZE = 80; 
     const SDL_Color GRID_COLOR = { 100, 100, 100, 255 };
-    const SDL_Color FIELD_COLOR = { 0, 0, 0, 0 };
-    const SDL_Color ALT_FIELD_COLOR = { 255, 255, 255, 0 };
+    const SDL_Color FIELD_COLOR = { 50, 50, 50, 50 };
+    const SDL_Color ALT_FIELD_COLOR = { 255, 255, 245, 0 };
 
     SDL_Window* window;
     SDL_Renderer* renderer;

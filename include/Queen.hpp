@@ -6,11 +6,11 @@
 #include <iostream>
 #include <string>
 
-#include "include/Piece.hpp"
+#include "Piece.hpp"
 
 class Queen : public Piece {
     public:
-    Queen(bool input_color, int x, int y,  SDL_Texture* image);
+    Queen(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
 };
 
 #endif 

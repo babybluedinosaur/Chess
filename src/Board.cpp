@@ -11,7 +11,7 @@ Board::Board() {
     }
     closeSDL();
 }
-
+ 
 void Board::initializeBoard() {
     Pawn(false, 1, 1,"/home/sidar/Downloads/white_pawn.png", renderer);    
 }
@@ -135,9 +135,19 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
             }
         }
     }
+    
     for (int x = 0; x < 8; x++) {
         for (int y = 0; y < 8; y++) {
-            if (y == 6) board[x][y] = Pawn(false, 80*x, 480,"/home/sidar/Downloads/white_pawn.png", renderer);    
+            //black
+            if (y == 0) {
+                board[x][y] = Pawn(false, 80*x+5, 0,"/home/sidar/Desktop/Chess/black/black_pawn.png", renderer);
+            }
+            if (y == 1) board[x][y] = Pawn(false, 80*x+5, 80,"/black/black_pawn.png", renderer);
+            //white
+            if (y == 6) board[x][y] = Pawn(true, 80*x+5, 480,"/white/white_pawn.png", renderer);
+            if (y == 7) {
+                board[x][y] = Pawn(true, 80*x+5, 560,"/white/white_pawn.png", renderer); 
+            }        
         }
     }
     SDL_RenderPresent(renderer);
