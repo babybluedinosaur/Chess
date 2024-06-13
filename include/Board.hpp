@@ -9,10 +9,11 @@
 
 #include "Piece.hpp"
 #include "Pawn.hpp"
-
-extern SDL_Window* window;
-extern SDL_Renderer* renderer;
-extern TTF_Font* font;
+#include "Rook.hpp"
+#include "Bishop.hpp"
+#include "King.hpp"
+#include "Queen.hpp"
+#include "Knight.hpp"
 
 class Board {
 private:

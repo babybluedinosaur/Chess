@@ -1,5 +1,5 @@
-#ifndef PAWN_HPP
-#define PAWN_HPP
+#ifndef KING_HPP
+#define KING_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>

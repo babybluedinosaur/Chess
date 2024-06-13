@@ -2,7 +2,6 @@
 
 Board::Board() {
     initializeSDL();
-    initializeBoard();
 
     bool quit = false;
     while (!quit) {
@@ -11,10 +10,7 @@ Board::Board() {
     }
     closeSDL();
 }
- 
-void Board::initializeBoard() {
-    Pawn(false, 1, 1,"/home/sidar/Downloads/white_pawn.png", renderer);    
-}
+
 
 bool Board::initializeSDL() {
     if (SDL_Init(SDL_INIT_VIDEO) != 0) {
@@ -140,13 +136,28 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
         for (int y = 0; y < 8; y++) {
             //black
             if (y == 0) {
-                board[x][y] = Pawn(false, 80*x+5, 0,"/home/sidar/Desktop/Chess/black/black_pawn.png", renderer);
+                if(x == 0) board[x][y] = Rook(false, 80*x+5, 0,"black/black_rook.png", renderer);
+                if(x == 1) board[x][y] = Knight(false, 80*x+5, 0,"black/black_knight.png", renderer);
+                if(x == 2) board[x][y] = Bishop(false, 80*x+5, 0,"black/black_bishop.png", renderer);
+                if(x == 3) board[x][y] = Queen(false, 80*x+5, 0,"black/black_queen.png", renderer);
+                if(x == 4) board[x][y] = King(false, 80*x+5, 0,"black/black_king.png", renderer);
+                if(x == 5) board[x][y] = Bishop(false, 80*x+5, 0,"black/black_bishop.png", renderer);
+                if(x == 6) board[x][y] = Knight(false, 80*x+5, 0,"black/black_knight.png", renderer);
+                if(x == 7) board[x][y] = Rook(false, 80*x+5, 0,"black/black_rook.png", renderer);
+
             }
-            if (y == 1) board[x][y] = Pawn(false, 80*x+5, 80,"/black/black_pawn.png", renderer);
+            if (y == 1) board[x][y] = Pawn(false, 80*x+5, 80,"black/black_pawn.png", renderer);
             //white
-            if (y == 6) board[x][y] = Pawn(true, 80*x+5, 480,"/white/white_pawn.png", renderer);
+            if (y == 6) board[x][y] = Pawn(true, 80*x+5, 480,"white/white_pawn.png", renderer);
             if (y == 7) {
-                board[x][y] = Pawn(true, 80*x+5, 560,"/white/white_pawn.png", renderer); 
+                if(x == 0) board[x][y] = Rook(true, 80*x+5, 560,"white/white_rook.png", renderer);
+                if(x == 1) board[x][y] = Knight(true, 80*x+5, 560,"white/white_knight.png", renderer);
+                if(x == 2) board[x][y] = Bishop(true, 80*x+5, 560,"white/white_bishop.png", renderer);
+                if(x == 3) board[x][y] = Queen(true, 80*x+5, 560,"white/white_queen.png", renderer);
+                if(x == 4) board[x][y] = King(true, 80*x+5, 560,"white/white_king.png", renderer);
+                if(x == 5) board[x][y] = Bishop(true, 80*x+5, 560,"white/white_bishop.png", renderer);
+                if(x == 6) board[x][y] = Knight(true, 80*x+5, 560,"white/white_knight.png", renderer);
+                if(x == 7) board[x][y] = Rook(true, 80*x+5, 560,"white/white_rook.png", renderer);
             }        
         }
     }

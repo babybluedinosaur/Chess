@@ -1,5 +1,5 @@
-#ifndef PAWN_HPP
-#define PAWN_HPP
+#ifndef ROOK_HPP
+#define ROOK_HPP
 
 #include <SDL2/SDL.h>
 #include <SDL2/SDL_image.h>
