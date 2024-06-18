@@ -13,16 +13,18 @@ private:
     int x;
     int y;
     SDL_Texture* image = nullptr;
+    SDL_Rect* renderQuad = new SDL_Rect;
 
 public:
     Piece();
     Piece(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
     void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
+    void setRect(int x, int y);
     bool getColor() const;
     SDL_Texture* getImage();
+    SDL_Rect* getRect();
     std::pair<int, int> getCoordinates();
-    SDL_Rect getSDLRect();
 };
 
 #endif 

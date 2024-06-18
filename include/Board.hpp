@@ -6,6 +6,10 @@
 #include <SDL2/SDL_ttf.h>
 #include <iostream>
 #include <string>
+#include <cmath>
+#include <cfenv>
+
+#pragma STDC FENV_ACCESS ON
 
 #include "Piece.hpp"
 #include "Pawn.hpp"

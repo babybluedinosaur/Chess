@@ -162,26 +162,38 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
         }
     }
     SDL_RenderPresent(renderer);
+
+}
+
+double bankers_round(double value) {
+    // Set rounding mode to FE_TONEAREST
+    std::fesetround(FE_TONEAREST);
+    return std::nearbyint(value);
 }
 
 void Board::handleEvents(bool& quit) {
     SDL_Event event;
     int mouseX, mouseY;
+    int offsetX, offsetY;
     bool isDragging = false;
     Piece* selectedObject = nullptr;
     while (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_QUIT) {
             quit = true;
         } 
-        /*else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        else if (event.type == SDL_MOUSEBUTTONDOWN) {
             if (event.button.button == SDL_BUTTON_LEFT) {
-                int mouseX = event.button.x;
-                int mouseY = event.button.y;
-                if (mouseX >= pieceRect.x && mouseX <= pieceRect.x + PIECE_WIDTH &&
-                    mouseY >= pieceRect.y && mouseY <= pieceRect.y + PIECE_HEIGHT) {
+                mouseX = (event.button.x-5)/80;
+                mouseX = bankers_round(mouseX);
+                mouseY = (event.button.y-5)/80;
+                mouseY = bankers_round(mouseY);
+                //hier print und debuggen
+                std::pair piecePos = board[mouseX][mouseY].getCoordinates();
+                if (mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
+                    mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
                     isDragging = true;
-                    offsetX = mouseX - pieceRect.x;
-                    offsetY = mouseY - pieceRect.y;
+                    offsetX = mouseX - piecePos.first;
+                    offsetY = mouseY - piecePos.second;
                 }
             }
         } else if (event.type == SDL_MOUSEBUTTONUP) {
@@ -190,12 +202,14 @@ void Board::handleEvents(bool& quit) {
             }
         } else if (event.type == SDL_MOUSEMOTION) {
             if (isDragging) {
-                pieceRect.x = event.motion.x - offsetX;
-                pieceRect.y = event.motion.y - offsetY;
+                SDL_Rect* newPos = board[mouseX][mouseY].getRect();
+                newPos->x = event.motion.x - offsetX;
+                newPos->y = event.motion.y - offsetY;
             }
-        }*/
+        }
     }
 }
+
 
 int main(int argc, char* argv[]) {
     Board bruh = Board();

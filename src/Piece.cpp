@@ -20,13 +20,22 @@ void Piece::setImage(std::string path, SDL_Renderer* renderer) {
         }
         SDL_FreeSurface(loadedSurface);
     }
-    SDL_Rect renderQuad = { x, y, 64, 64 };
-    SDL_RenderCopy(renderer, image, nullptr, &renderQuad);
+    renderQuad->x = x;
+    renderQuad->y = y;
+    renderQuad->h = 64;
+    renderQuad->w = 64;
+    SDL_RenderCopy(renderer, image, nullptr, renderQuad);
 }
+
 
 void Piece::setCoordinates(int input_x, int input_y) {
     x  = input_x;
     y = input_y;
+}
+
+void Piece::setRect(int x, int y) {
+    renderQuad->x = x;
+    renderQuad->y = y;
 }
 
 bool Piece::getColor() const {
@@ -41,10 +50,9 @@ std::pair<int, int> Piece::getCoordinates() {
     return std::make_pair(x, y);
 }
 
-SDL_Rect Piece::getSDLRect() {
-    std::pair<int,int> coordinates = getCoordinates();
-    return SDL_Rect{coordinates.first, coordinates.second, 64, 64};
-};
+SDL_Rect* Piece::getRect() {
+    return renderQuad;
+}
 
 
 // int main() {
