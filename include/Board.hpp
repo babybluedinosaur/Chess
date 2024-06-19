@@ -9,6 +9,8 @@
 #include <cmath>
 #include <cfenv>
 
+using namespace std;
+
 #pragma STDC FENV_ACCESS ON
 
 #include "Piece.hpp"
@@ -21,7 +23,7 @@
 
 class Board {
 private:
-    Piece board[8][8];
+    Piece* board[8][8];
     const int WINDOW_WIDTH = 640;
     const int WINDOW_HEIGHT = 640;
     const int GRID_SIZE = 80; 
