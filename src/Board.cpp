@@ -8,6 +8,12 @@ Board::Board() {
         handleEvents(quit);
         buildBoard(window, renderer);
     }
+    for (int x = 0; x < 8; ++x) {
+        for (int y = 0; y < 8; ++y) {
+            delete board[x][y];
+            board[x][y] = nullptr;
+        }
+    }
     closeSDL();
 }
 
@@ -136,27 +142,27 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
         for (int y = 0; y < 8; y++) {
             //black
             if (y == 0) {
-                if(x == 0) board[x][y] = &Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
-                if(x == 1) board[x][y] = &Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
-                if(x == 2) board[x][y] = &Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
-                if(x == 3) board[x][y] = &Queen(false, 80*x+5, 5,"black/black_queen.png", renderer);
-                if(x == 4) board[x][y] = &King(false, 80*x+5, 5,"black/black_king.png", renderer);
-                if(x == 5) board[x][y] = &Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
-                if(x == 6) board[x][y] = &Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
-                if(x == 7) board[x][y] = &Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
+                if(x == 0) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
+                if(x == 1) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
+                if(x == 2) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
+                if(x == 3) board[x][y] = new Queen(false, 80*x+5, 5,"black/black_queen.png", renderer);
+                if(x == 4) board[x][y] = new King(false, 80*x+5, 5,"black/black_king.png", renderer);
+                if(x == 5) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
+                if(x == 6) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
+                if(x == 7) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
 
-            } else if (y == 1) board[x][y] = &Pawn(false, 80*x+5, 80,"black/black_pawn.png", renderer);
+            } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 80,"black/black_pawn.png", renderer);
             //white
-            else if (y == 6) board[x][y] = &Pawn(true, 80*x+5, 480,"white/white_pawn.png", renderer);
+            else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 480,"white/white_pawn.png", renderer);
             else if (y == 7) {
-                if(x == 0) board[x][y] = &Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
-                if(x == 1) board[x][y] = &Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
-                if(x == 2) board[x][y] = &Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
-                if(x == 3) board[x][y] = &Queen(true, 80*x+5, 565,"white/white_queen.png", renderer);
-                if(x == 4) board[x][y] = &King(true, 80*x+5, 565,"white/white_king.png", renderer);
-                if(x == 5) board[x][y] = &Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
-                if(x == 6) board[x][y] = &Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
-                if(x == 7) board[x][y] = &Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
+                if(x == 0) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
+                if(x == 1) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
+                if(x == 2) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
+                if(x == 3) board[x][y] = new Queen(true, 80*x+5, 565,"white/white_queen.png", renderer);
+                if(x == 4) board[x][y] = new King(true, 80*x+5, 565,"white/white_king.png", renderer);
+                if(x == 5) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
+                if(x == 6) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
+                if(x == 7) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
             } else board[x][y] = nullptr;
         }
     }
@@ -165,7 +171,6 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
 }
 
 double bankers_round(double value) {
-    // Set rounding mode to FE_TONEAREST
     std::fesetround(FE_TONEAREST);
     return std::nearbyint(value);
 }
@@ -174,45 +179,47 @@ void Board::handleEvents(bool& quit) {
     SDL_Event event;
     int mouseX, mouseY;
     int offsetX, offsetY;
-    bool isDragging = false;
+    bool isPickedUp = false;
     Piece* selectedObject = nullptr;
     while (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_QUIT) {
             quit = true;
-        } 
-        else if (event.type == SDL_MOUSEBUTTONDOWN) {
+        } else if (event.type == SDL_MOUSEBUTTONDOWN) {
             if (event.button.button == SDL_BUTTON_LEFT) {
-                mouseX = (event.button.x-5)/80;
-                mouseY = (event.button.y-5)/80;
-                mouseX = bankers_round(mouseX);
-                mouseY = bankers_round(mouseY);
-                printf("mouse x: %d, mouse y: %d\n", mouseX, mouseY);
-
-                Piece* piece = board[mouseX][mouseY];
+                
+                //normalize mouse posiiton
+                mouseX = event.button.x;
+                mouseY = event.button.y;
+                int x = (event.button.y-5)/80;
+                int y = (event.button.x-5)/80;
+                x = bankers_round(x);
+                y = bankers_round(y);
+               
+                //get piece nearest to mouse position
+                Piece* piece = board[x][y];
                 if (piece != nullptr) {
-                    std::pair piecePos = piece->getCoordinates();
-                    printf("piece x: %d, piece y: %d\n", piecePos.first, piecePos.second);
+
+                    //calculate array coordinates of piece
+                    std::pair piecePos = piece->getCoordinates();       
                     int pieceX = (piecePos.first-5)/80;
                     int pieceY = (piecePos.second)/80;
-                    printf("piece x: %d, piece y: %d\n", pieceX, pieceY);
-                    printf("\n");
-                    if (mouseX >= piecePos.first && mouseX <= piecePos.first&&
-                        mouseY >= piecePos.second && mouseY <= piecePos.second) {
-                        isDragging = true;
+
+                    if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
+                        mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
+        
+                        isPickedUp = true;
                         offsetX = mouseX - piecePos.first;
                         offsetY = mouseY - piecePos.second;
+                        
+                    } else if (isPickedUp) {
+
+                        // Place the piece
+                        SDL_Rect* pieceRect = board[pieceX][pieceY]->getRect(); 
+                        pieceRect->x = mouseX - offsetX;
+                        pieceRect->y = mouseY - offsetY;
+                        isPickedUp = false;
                     }
                 }
-            }
-        } else if (event.type == SDL_MOUSEBUTTONUP) {
-            if (event.button.button == SDL_BUTTON_LEFT) {
-                isDragging = false;
-            }
-        } else if (event.type == SDL_MOUSEMOTION) {
-            if (isDragging) {
-                SDL_Rect* newPos = board[mouseX][mouseY]->getRect();
-                newPos->x = event.motion.x - offsetX;
-                newPos->y = event.motion.y - offsetY;
             }
         }
     }
