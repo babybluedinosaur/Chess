@@ -34,6 +34,9 @@ private:
     SDL_Window* window;
     SDL_Renderer* renderer;
     TTF_Font* font;
+    bool isPickedUp = false;
+    int offsetX, offsetY = 0;
+    Piece* selectedPiece = nullptr;
 
 public:
     Board();

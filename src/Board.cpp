@@ -7,6 +7,7 @@ Board::Board() {
     while (!quit) {
         handleEvents(quit);
         buildBoard(window, renderer);
+        SDL_RenderPresent(renderer);
     }
     for (int x = 0; x < 8; ++x) {
         for (int y = 0; y < 8; ++y) {
@@ -151,9 +152,9 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
                 if(x == 6) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
                 if(x == 7) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
 
-            } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 80,"black/black_pawn.png", renderer);
+            } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 85,"black/black_pawn.png", renderer);
             //white
-            else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 480,"white/white_pawn.png", renderer);
+            else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 485,"white/white_pawn.png", renderer);
             else if (y == 7) {
                 if(x == 0) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
                 if(x == 1) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
@@ -166,8 +167,6 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
             } else board[x][y] = nullptr;
         }
     }
-    SDL_RenderPresent(renderer);
-
 }
 
 double bankers_round(double value) {
@@ -178,43 +177,40 @@ double bankers_round(double value) {
 void Board::handleEvents(bool& quit) {
     SDL_Event event;
     int mouseX, mouseY;
-    int offsetX, offsetY;
-    bool isPickedUp = false;
-    Piece* selectedObject = nullptr;
     while (SDL_PollEvent(&event) != 0) {
         if (event.type == SDL_QUIT) {
             quit = true;
         } else if (event.type == SDL_MOUSEBUTTONDOWN) {
             if (event.button.button == SDL_BUTTON_LEFT) {
                 
-                //normalize mouse posiiton
+                // get piece nearest to mouse position
                 mouseX = event.button.x;
                 mouseY = event.button.y;
-                int x = (event.button.y-5)/80;
-                int y = (event.button.x-5)/80;
+                int x = (event.button.x-5)/80;
+                int y = (event.button.y-5)/80;
                 x = bankers_round(x);
-                y = bankers_round(y);
-               
-                //get piece nearest to mouse position
-                Piece* piece = board[x][y];
-                if (piece != nullptr) {
+                y = bankers_round(y);               
+                selectedPiece = board[x][y];
+                if (selectedPiece != nullptr) {
+                    
+                    // get board-coordinates of piece
+                    std::pair piecePos = selectedPiece->getCoordinates();
 
-                    //calculate array coordinates of piece
-                    std::pair piecePos = piece->getCoordinates();       
-                    int pieceX = (piecePos.first-5)/80;
-                    int pieceY = (piecePos.second)/80;
+                    printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
 
                     if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
                         mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
         
+                        printf("picked up\n");
                         isPickedUp = true;
                         offsetX = mouseX - piecePos.first;
                         offsetY = mouseY - piecePos.second;
                         
                     } else if (isPickedUp) {
-
+                        
                         // Place the piece
-                        SDL_Rect* pieceRect = board[pieceX][pieceY]->getRect(); 
+                        printf("place\n");
+                        SDL_Rect* pieceRect = selectedPiece->getRect(); 
                         pieceRect->x = mouseX - offsetX;
                         pieceRect->y = mouseY - offsetY;
                         isPickedUp = false;
@@ -223,11 +219,16 @@ void Board::handleEvents(bool& quit) {
             }
         }
     }
+    SDL_RenderClear(renderer);
+    SDL_Rect* pieceRect = selectedPiece->getRect();
+    selectedPiece->renderTexture(renderer, selectedPiece->getImage(), pieceRect->x, pieceRect->y,
+    pieceRect->w, pieceRect->h);
 }
 
 
 int main(int argc, char* argv[]) {
     Board bruh = Board();
     return 0;
+
 }
 

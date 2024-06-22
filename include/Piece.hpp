@@ -14,6 +14,7 @@ private:
     int y;
     SDL_Texture* image = nullptr;
     SDL_Rect* renderQuad = new SDL_Rect;
+    std::string path;
 
 public:
     Piece();
@@ -21,10 +22,12 @@ public:
     void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
     void setRect(int x, int y);
+    void renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y, int w, int h);
     bool getColor() const;
     SDL_Texture* getImage();
     SDL_Rect* getRect();
     std::pair<int, int> getCoordinates();
+    std::string getPath();
 };
 
 #endif 

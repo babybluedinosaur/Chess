@@ -10,6 +10,9 @@ Piece::Piece(bool input_color, int input_x, int input_y, std::string path, SDL_R
 }
 
 void Piece::setImage(std::string path, SDL_Renderer* renderer) {
+    path = path;
+
+    //load texture
     SDL_Surface* loadedSurface = IMG_Load(path.c_str());
     if (loadedSurface == nullptr) {
         std::cerr << "Unable to load image" << std::endl;
@@ -20,11 +23,17 @@ void Piece::setImage(std::string path, SDL_Renderer* renderer) {
         }
         SDL_FreeSurface(loadedSurface);
     }
+
+    //place piece on board 
+    renderTexture(renderer, image, x, y, 64, 64);
+}
+
+void Piece::renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y, int w, int h) {
     renderQuad->x = x;
     renderQuad->y = y;
     renderQuad->h = 64;
     renderQuad->w = 64;
-    SDL_RenderCopy(renderer, image, nullptr, renderQuad);
+    SDL_RenderCopy(renderer, tex, nullptr, renderQuad);
 }
 
 
@@ -54,18 +63,6 @@ SDL_Rect* Piece::getRect() {
     return renderQuad;
 }
 
-
-// int main() {
-//     SDL_Window* window = SDL_CreateWindow("Test Window", SDL_WINDOWPOS_UNDEFINED, SDL_WINDOWPOS_UNDEFINED, 800, 600, SDL_WINDOW_SHOWN);
-// SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
-
-// Piece testPiece(false, 100, 100, "/home/sidar/Downloads/white_pawn.png", renderer);
-
-// SDL_RenderPresent(renderer);
-
-// SDL_Delay(2000);
-
-// SDL_DestroyRenderer(renderer);
-// SDL_DestroyWindow(window);
-
-// }
+std::string Piece::getPath() {
+    return path;
+}
