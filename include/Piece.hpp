@@ -22,7 +22,7 @@ public:
     void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
     void setRect(int x, int y);
-    void renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y, int w, int h);
+    void renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y);
     bool getColor() const;
     SDL_Texture* getImage();
     SDL_Rect* getRect();

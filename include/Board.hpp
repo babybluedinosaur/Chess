@@ -43,6 +43,7 @@ public:
     void initializeBoard();
     void buildBoard(SDL_Window* window, SDL_Renderer* renderer);
     void handleEvents(bool& quit);
+    double bankers_round(double value);
     bool initializeSDL();
     void closeSDL();
     void display() const;

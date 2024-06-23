@@ -25,10 +25,10 @@ void Piece::setImage(std::string path, SDL_Renderer* renderer) {
     }
 
     //place piece on board 
-    renderTexture(renderer, image, x, y, 64, 64);
+    renderTexture(renderer, image, x, y);
 }
 
-void Piece::renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y, int w, int h) {
+void Piece::renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y) {
     renderQuad->x = x;
     renderQuad->y = y;
     renderQuad->h = 64;
@@ -66,3 +66,5 @@ SDL_Rect* Piece::getRect() {
 std::string Piece::getPath() {
     return path;
 }
+
+
