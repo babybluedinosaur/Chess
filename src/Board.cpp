@@ -35,6 +35,7 @@ Board::Board() {
                         if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
                             mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
             
+                            //TODO: check if this offsetX or offsetY even makes sense
                             printf("picked up\n");
                             isPickedUp = true;
                             offsetX = mouseX - piecePos.first;
@@ -55,10 +56,11 @@ Board::Board() {
             }
         }
 
+        //TODO: clear board (renderer) and render board again -> fame
         if (selectedPiece != nullptr) {
+            SDL_RenderClear(renderer);
             SDL_Rect* pieceRect = selectedPiece->getRect();
-            selectedPiece->renderTexture(renderer, selectedPiece->getImage(), pieceRect->x, pieceRect->y);
-            SDL_RenderPresent(renderer);
+            buildBoard(window, renderer);
         }
     }
 
