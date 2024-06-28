@@ -30,7 +30,7 @@ Board::Board() {
                         // get board-coordinates of piece
                         std::pair piecePos = selectedPiece->getCoordinates();
 
-                        // printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
+                        printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
 
                         if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
                             mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
@@ -48,7 +48,18 @@ Board::Board() {
                             SDL_Rect* pieceRect = selectedPiece->getRect(); 
                             selectedPiece->setCoordinates(mouseX - offsetX, mouseY - offsetY);
                             selectedPiece->setRect(mouseX - offsetX, mouseY - offsetY);
+                            
                             // TODO: change board-array position
+                            mouseX = mouseX - offsetX;
+                            mouseY = mouseY - offsetY;
+                            int new_x = (mouseX-5)/80;
+                            int new_y = (mouseY-5)/80;
+
+                            printf("new x: %d, old x: %d, new y: %d, old y: %d \n", new_x, x, new_y, y);
+
+                            board[new_x][new_y] = selectedPiece;
+                            board[x][y] = nullptr;
+                            
                             isPickedUp = false;
                         }
                     }
