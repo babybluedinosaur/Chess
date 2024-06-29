@@ -25,43 +25,47 @@ Board::Board() {
                     x = bankers_round(x);
                     y = bankers_round(y);               
                     selectedPiece = board[x][y];
-                    if (selectedPiece != nullptr) {
-                        
+
+                    if (selectedPiece != nullptr && !isPickedUp) {
+
                         // get board-coordinates of piece
                         std::pair piecePos = selectedPiece->getCoordinates();
+                        
+                        // printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
+        
+                        // TODO: check if this offsetX or offsetY even makes sense
+                        printf("picked up...\n");
+                        // offsetX = mouseX - piecePos.first;
+                        // offsetY = mouseY - piecePos.second;
+                        // printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
+                        isPickedUp = true;
+                        // printf("offsetX: %d, offsetY: %d\n", offsetX, offsetY);
+                        
+                    } else if (isPickedUp) {
+                        
+                        // Place the piece
 
-                        printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
-
-                        if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
-                            mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
-            
-                            //TODO: check if this offsetX or offsetY even makes sense
-                            printf("picked up\n");
-                            isPickedUp = true;
-                            offsetX = mouseX - piecePos.first;
-                            offsetY = mouseY - piecePos.second;
-                            
-                        } else if (isPickedUp) {
-                            
-                            // Place the piece
-                            printf("place\n");
-                            SDL_Rect* pieceRect = selectedPiece->getRect(); 
-                            selectedPiece->setCoordinates(mouseX - offsetX, mouseY - offsetY);
-                            selectedPiece->setRect(mouseX - offsetX, mouseY - offsetY);
-                            
-                            // TODO: change board-array position
-                            mouseX = mouseX - offsetX;
-                            mouseY = mouseY - offsetY;
+                            printf("placed...\n");
+                            // calculate new position
+                            mouseX = event.button.x;
+                            mouseY = event.button.y;
                             int new_x = (mouseX-5)/80;
                             int new_y = (mouseY-5)/80;
+                            new_x = bankers_round(new_x);
+                            new_y = bankers_round(new_y);
 
                             printf("new x: %d, old x: %d, new y: %d, old y: %d \n", new_x, x, new_y, y);
 
                             board[new_x][new_y] = selectedPiece;
                             board[x][y] = nullptr;
+
+                            SDL_Rect* pieceRect = selectedPiece->getRect(); 
+                            selectedPiece->setCoordinates((80*new_x+5), (80*new_y+5));
+                            selectedPiece->setRect((80*new_x+5), (80*new_y+5));
                             
+                            // TODO: change board-array position
+
                             isPickedUp = false;
-                        }
                     }
                 }
             }
