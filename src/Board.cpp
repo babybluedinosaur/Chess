@@ -31,41 +31,30 @@ Board::Board() {
                         // get board-coordinates of piece
                         std::pair piecePos = selectedPiece->getCoordinates();
                         
-                        // printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
-        
-                        // TODO: check if this offsetX or offsetY even makes sense
-                        printf("picked up...\n");
-                        // offsetX = mouseX - piecePos.first;
-                        // offsetY = mouseY - piecePos.second;
-                        // printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
+                        printf("picked up piece at: (%d,%d)\n", x, y);
                         isPickedUp = true;
-                        // printf("offsetX: %d, offsetY: %d\n", offsetX, offsetY);
                         
                     } else if (isPickedUp) {
                         
-                        // Place the piece
+                        // calculate new position
+                        mouseX = event.button.x;
+                        mouseY = event.button.y;
+                        int new_x = (mouseX-5)/80;
+                        int new_y = (mouseY-5)/80;
+                        new_x = bankers_round(new_x);
+                        new_y = bankers_round(new_y);
 
-                            printf("placed...\n");
-                            // calculate new position
-                            mouseX = event.button.x;
-                            mouseY = event.button.y;
-                            int new_x = (mouseX-5)/80;
-                            int new_y = (mouseY-5)/80;
-                            new_x = bankers_round(new_x);
-                            new_y = bankers_round(new_y);
+                        printf("placed piece at position: (%d,%d)\n", new_x, new_y);
 
-                            printf("new x: %d, old x: %d, new y: %d, old y: %d \n", new_x, x, new_y, y);
+                        //TODO: delete former Piece properly, fix this
+                        board[new_x][new_y] = Piece(selectedPiece, renderer);
+                        board[x][y] = nullptr;
 
-                            board[new_x][new_y] = selectedPiece;
-                            board[x][y] = nullptr;
-
-                            SDL_Rect* pieceRect = selectedPiece->getRect(); 
-                            selectedPiece->setCoordinates((80*new_x+5), (80*new_y+5));
-                            selectedPiece->setRect((80*new_x+5), (80*new_y+5));
-                            
-                            // TODO: change board-array position
-
-                            isPickedUp = false;
+                        SDL_Rect* pieceRect = board[new_x][new_y]->getRect(); 
+                        board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
+                        board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
+                        
+                        isPickedUp = false;
                     }
                 }
             }

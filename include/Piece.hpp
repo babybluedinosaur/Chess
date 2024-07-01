@@ -18,6 +18,7 @@ private:
 
 public:
     Piece();
+    Piece(Piece* other, SDL_Renderer* renderer);
     Piece(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer);
     void setImage(std::string path, SDL_Renderer* renderer);
     void setCoordinates(int x, int y);
