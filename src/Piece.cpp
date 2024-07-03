@@ -17,11 +17,11 @@ Piece::Piece(bool input_color, int input_x, int input_y, std::string path, SDL_R
     setImage(path, renderer);
 }
 
-void Piece::setImage(std::string path, SDL_Renderer* renderer) {
-    path = path;
+void Piece::setImage(std::string input_path, SDL_Renderer* renderer) {
+    path = input_path;
 
     //load texture
-    SDL_Surface* loadedSurface = IMG_Load(path.c_str());
+    SDL_Surface* loadedSurface = IMG_Load(input_path.c_str());
     if (loadedSurface == nullptr) {
         std::cerr << "Unable to load image" << std::endl;
     } else {

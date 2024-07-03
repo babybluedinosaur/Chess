@@ -24,11 +24,11 @@ Board::Board() {
                     int y = (event.button.y-5)/80;
                     x = bankers_round(x);
                     y = bankers_round(y);               
-                    selectedPiece = board[x][y];
 
-                    if (selectedPiece != nullptr && !isPickedUp) {
+                    if (board[x][y] != nullptr && !isPickedUp) {
 
                         // get board-coordinates of piece
+                        selectedPiece = board[x][y];
                         std::pair piecePos = selectedPiece->getCoordinates();
                         
                         printf("picked up piece at: (%d,%d)\n", x, y);
@@ -47,12 +47,12 @@ Board::Board() {
                         printf("placed piece at position: (%d,%d)\n", new_x, new_y);
 
                         //TODO: delete former Piece properly, fix this
-                        board[new_x][new_y] = Piece(selectedPiece, renderer);
-                        board[x][y] = nullptr;
+                        board[new_x][new_y] = new Piece(selectedPiece, renderer);
 
-                        SDL_Rect* pieceRect = board[new_x][new_y]->getRect(); 
+                        SDL_Rect* pieceRect = board[new_x][new_y]->getRect();
                         board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
                         board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
+                        board[x][y] = nullptr;
                         
                         isPickedUp = false;
                     }
