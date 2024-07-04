@@ -2,7 +2,7 @@
 
 Board::Board() {
     initializeSDL();
-    buildBoard(window, renderer);
+    buildBoard(window, renderer, false);
 
     SDL_Event event;
     int mouseX, mouseY;
@@ -29,7 +29,6 @@ Board::Board() {
 
                         // get board-coordinates of piece
                         selectedPiece = board[x][y];
-                        std::pair piecePos = selectedPiece->getCoordinates();
                         
                         printf("picked up piece at: (%d,%d)\n", x, y);
                         isPickedUp = true;
@@ -44,14 +43,13 @@ Board::Board() {
                         new_x = bankers_round(new_x);
                         new_y = bankers_round(new_y);
 
-                        printf("placed piece at position: (%d,%d)\n", new_x, new_y);
-
                         //TODO: delete former Piece properly, fix this
                         board[new_x][new_y] = new Piece(selectedPiece, renderer);
+                        printf("placed piece at position: (%d,%d)\n", new_x, new_y);
 
-                        SDL_Rect* pieceRect = board[new_x][new_y]->getRect();
                         board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
                         board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
+
                         board[x][y] = nullptr;
                         
                         isPickedUp = false;
@@ -59,13 +57,8 @@ Board::Board() {
                 }
             }
         }
-
-        //TODO: clear board (renderer) and render board again -> fame
-        if (selectedPiece != nullptr) {
-            SDL_RenderClear(renderer);
-            SDL_Rect* pieceRect = selectedPiece->getRect();
-            buildBoard(window, renderer);
-        }
+        SDL_RenderClear(renderer);
+        buildBoard(window, renderer, true);
     }
 
     for (int x = 0; x < 8; ++x) {
@@ -130,7 +123,7 @@ void Board::closeSDL() {
     SDL_Quit();
 }
 
-void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
+void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer, bool isCreated) {
     font = TTF_OpenFont("/usr/share/fonts/truetype/msttcorefonts/Arial.ttf", 22);
     if (!font) {
         SDL_Log("Failed to load font: %s", TTF_GetError());
@@ -197,33 +190,43 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
             }
         }
     }
-    
-    for (int x = 0; x < 8; x++) {
-        for (int y = 0; y < 8; y++) {
-            //black
-            if (y == 0) {
-                if(x == 0) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
-                if(x == 1) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
-                if(x == 2) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
-                if(x == 3) board[x][y] = new Queen(false, 80*x+5, 5,"black/black_queen.png", renderer);
-                if(x == 4) board[x][y] = new King(false, 80*x+5, 5,"black/black_king.png", renderer);
-                if(x == 5) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
-                if(x == 6) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
-                if(x == 7) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
 
-            } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 85,"black/black_pawn.png", renderer);
-            //white
-            else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 485,"white/white_pawn.png", renderer);
-            else if (y == 7) {
-                if(x == 0) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
-                if(x == 1) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
-                if(x == 2) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
-                if(x == 3) board[x][y] = new Queen(true, 80*x+5, 565,"white/white_queen.png", renderer);
-                if(x == 4) board[x][y] = new King(true, 80*x+5, 565,"white/white_king.png", renderer);
-                if(x == 5) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
-                if(x == 6) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
-                if(x == 7) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
-            } else board[x][y] = nullptr;
+    if (!isCreated) {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                //black
+                if (y == 0) {
+                    if(x == 0) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
+                    if(x == 1) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
+                    if(x == 2) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
+                    if(x == 3) board[x][y] = new Queen(false, 80*x+5, 5,"black/black_queen.png", renderer);
+                    if(x == 4) board[x][y] = new King(false, 80*x+5, 5,"black/black_king.png", renderer);
+                    if(x == 5) board[x][y] = new Bishop(false, 80*x+5, 5,"black/black_bishop.png", renderer);
+                    if(x == 6) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
+                    if(x == 7) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
+
+                } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 85,"black/black_pawn.png", renderer);
+                //white
+                else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 485,"white/white_pawn.png", renderer);
+                else if (y == 7) {
+                    if(x == 0) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
+                    if(x == 1) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
+                    if(x == 2) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
+                    if(x == 3) board[x][y] = new Queen(true, 80*x+5, 565,"white/white_queen.png", renderer);
+                    if(x == 4) board[x][y] = new King(true, 80*x+5, 565,"white/white_king.png", renderer);
+                    if(x == 5) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
+                    if(x == 6) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
+                    if(x == 7) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
+                } else board[x][y] = nullptr;
+            }
+        }
+    } else {
+        for (int x = 0; x < 8; x++) {
+            for (int y = 0; y < 8; y++) {
+                if (board[x][y] != nullptr) {
+                    board[x][y]->setImage(board[x][y]->getPath(), renderer);
+                }
+            }
         }
     }
     SDL_RenderPresent(renderer);
@@ -232,58 +235,6 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer) {
 double Board::bankers_round(double value) {
     std::fesetround(FE_TONEAREST);
     return std::nearbyint(value);
-}
-
-void Board::handleEvents(bool& quit) {
-    /*SDL_Event event;
-    int mouseX, mouseY;
-    while (SDL_PollEvent(&event) != 0) {
-        if (event.type == SDL_QUIT) {
-            quit = true;
-        } else if (event.type == SDL_MOUSEBUTTONDOWN) {
-            if (event.button.button == SDL_BUTTON_LEFT) {
-                
-                // get piece nearest to mouse position
-                mouseX = event.button.x;
-                mouseY = event.button.y;
-                int x = (event.button.x-5)/80;
-                int y = (event.button.y-5)/80;
-                x = bankers_round(x);
-                y = bankers_round(y);               
-                selectedPiece = board[x][y];
-                if (selectedPiece != nullptr) {
-                    
-                    // get board-coordinates of piece
-                    std::pair piecePos = selectedPiece->getCoordinates();
-
-                    printf("mouse x: %d, piece x: %d, mouse y: %d, piece y: %d \n", mouseX, piecePos.first, mouseY, piecePos.second);
-
-                    if (!isPickedUp && mouseX >= piecePos.first && mouseX <= piecePos.first + 64 &&
-                        mouseY >= piecePos.second && mouseY <= piecePos.second + 64) {
-        
-                        printf("picked up\n");
-                        isPickedUp = true;
-                        offsetX = mouseX - piecePos.first;
-                        offsetY = mouseY - piecePos.second;
-                        
-                    } else if (isPickedUp) {
-                        
-                        // Place the piece
-                        printf("place\n");
-                        SDL_Rect* pieceRect = selectedPiece->getRect(); 
-                        pieceRect->x = mouseX - offsetX;
-                        pieceRect->y = mouseY - offsetY;
-                        isPickedUp = false;
-                    }
-                }
-            }
-        }
-    }
-    SDL_RenderClear(renderer);
-    SDL_Rect* pieceRect = selectedPiece->getRect();
-    selectedPiece->renderTexture(renderer, selectedPiece->getImage(), pieceRect->x, pieceRect->y,
-    pieceRect->w, pieceRect->h);
-    */
 }
 
 

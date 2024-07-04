@@ -9,7 +9,6 @@ Piece::Piece(Piece* other, SDL_Renderer* renderer) {
     x = other->getCoordinates().first;
     y = other->getCoordinates().second;
     path = other->getPath();
-    setImage(path, renderer);
 }
 
 Piece::Piece(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer)
