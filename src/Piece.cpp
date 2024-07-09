@@ -8,6 +8,10 @@ Piece::Piece(Piece* other, SDL_Renderer* renderer) {
     white = other->getColor();
     x = other->getCoordinates().first;
     y = other->getCoordinates().second;
+    renderQuad->x = other->getRect()->x;
+    renderQuad->y = other->getRect()->y;
+    renderQuad->h = 64;
+    renderQuad->w = 64;
     path = other->getPath();
 }
 
