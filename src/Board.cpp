@@ -45,12 +45,20 @@ Board::Board() {
 
                         //TODO: delete former Piece properly, fix this
                         board[new_x][new_y] = new Piece(selectedPiece, renderer);
-                        printf("placed piece at position: (%d,%d)\n", new_x, new_y);
 
                         board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
                         board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
+                        
+                        printf("old position: (%d,%d)\n",  board[x][y]->getCoordinates().first, board[x][y]->getCoordinates().second);
+                        printf("placed piece at position: (%d,%d)\n",  board[new_x][new_y]->getCoordinates().first, board[new_x][new_y]->getCoordinates().second);
+                        
+                        if (board[new_x][new_y] == nullptr) printf("bruh\n");
 
                         board[x][y] = nullptr;
+                        
+                        if (board[new_x][new_y] == nullptr) printf("bruh\n");
+                        printf("old position: (%d,%d)\n",  board[x][y]->getCoordinates().first, board[x][y]->getCoordinates().second);
+                        printf("new position: (%d,%d)\n",  board[new_x][new_y]->getCoordinates().first, board[new_x][new_y]->getCoordinates().second);
                         
                         isPickedUp = false;
                     }
@@ -59,6 +67,7 @@ Board::Board() {
         }
         SDL_RenderClear(renderer);
         buildBoard(window, renderer, true);
+        selectedPiece = nullptr;
     }
 
     for (int x = 0; x < 8; ++x) {
