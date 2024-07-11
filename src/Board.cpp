@@ -18,8 +18,8 @@ Board::Board() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     
                     // get piece nearest to mouse position
-                    mouseX = event.button.x;
-                    mouseY = event.button.y;
+                    // mouseX = event.button.x;
+                    // mouseY = event.button.y;
                     int x = (event.button.x-5)/80;
                     int y = (event.button.y-5)/80;
                     x = bankers_round(x);
@@ -29,6 +29,7 @@ Board::Board() {
 
                         // get board-coordinates of piece
                         selectedPiece = board[x][y];
+
                         
                         printf("picked up piece at: (%d,%d)\n", x, y);
                         isPickedUp = true;
@@ -36,29 +37,21 @@ Board::Board() {
                     } else if (isPickedUp) {
                         
                         // calculate new position
-                        mouseX = event.button.x;
-                        mouseY = event.button.y;
-                        int new_x = (mouseX-5)/80;
-                        int new_y = (mouseY-5)/80;
+                        // mouseX = event.button.x;
+                        // mouseY = event.button.y;
+                        int new_x = (event.button.x-5)/80;
+                        int new_y = (event.button.y-5)/80;
                         new_x = bankers_round(new_x);
                         new_y = bankers_round(new_y);
 
                         //TODO: delete former Piece properly, fix this
-                        board[new_x][new_y] = new Piece(selectedPiece, renderer);
-
+                        board[new_x][new_y] = new Piece(board[x][y], renderer);
                         board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
                         board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
                         
-                        printf("old position: (%d,%d)\n",  board[x][y]->getCoordinates().first, board[x][y]->getCoordinates().second);
-                        printf("placed piece at position: (%d,%d)\n",  board[new_x][new_y]->getCoordinates().first, board[new_x][new_y]->getCoordinates().second);
-                        
-                        if (board[new_x][new_y] == nullptr) printf("bruh\n");
-
                         board[x][y] = nullptr;
                         
-                        if (board[new_x][new_y] == nullptr) printf("bruh\n");
-                        printf("old position: (%d,%d)\n",  board[x][y]->getCoordinates().first, board[x][y]->getCoordinates().second);
-                        printf("new position: (%d,%d)\n",  board[new_x][new_y]->getCoordinates().first, board[new_x][new_y]->getCoordinates().second);
+                        if (board[new_x][new_y] == nullptr) printf("board[%d][%d] is null, after nullifying board[%d][%d]\n", new_x, new_y, x, y);
                         
                         isPickedUp = false;
                     }

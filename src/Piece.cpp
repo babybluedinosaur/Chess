@@ -5,14 +5,18 @@ Piece::Piece() {
 }
 
 Piece::Piece(Piece* other, SDL_Renderer* renderer) {
-    white = other->getColor();
-    x = other->getCoordinates().first;
-    y = other->getCoordinates().second;
-    renderQuad->x = other->getRect()->x;
-    renderQuad->y = other->getRect()->y;
-    renderQuad->h = 64;
-    renderQuad->w = 64;
-    path = other->getPath();
+    if (other != nullptr) {
+        white = other->getColor();
+        x = other->getCoordinates().first;
+        y = other->getCoordinates().second;
+        renderQuad->x = other->getRect()->x;
+        renderQuad->y = other->getRect()->y;
+        renderQuad->h = 64;
+        renderQuad->w = 64;
+        path = other->getPath();
+    } else {
+        printf("copied piece is null!\n");
+    }
 }
 
 Piece::Piece(bool input_color, int input_x, int input_y, std::string path, SDL_Renderer* renderer)
@@ -44,6 +48,7 @@ void Piece::renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y
     renderQuad->y = y;
     renderQuad->h = 64;
     renderQuad->w = 64;
+    //TODO: renderQuad local?
     SDL_RenderCopy(renderer, tex, nullptr, renderQuad);
 }
 
