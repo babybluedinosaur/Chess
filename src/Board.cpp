@@ -18,8 +18,6 @@ Board::Board() {
                 if (event.button.button == SDL_BUTTON_LEFT) {
                     
                     // get piece nearest to mouse position
-                    // mouseX = event.button.x;
-                    // mouseY = event.button.y;
                     int x = (event.button.x-5)/80;
                     int y = (event.button.y-5)/80;
                     x = bankers_round(x);
@@ -29,29 +27,25 @@ Board::Board() {
 
                         // get board-coordinates of piece
                         selectedPiece = board[x][y];
-
-                        
-                        printf("picked up piece at: (%d,%d)\n", x, y);
                         isPickedUp = true;
+                        old_x = x;
+                        old_y = y;
+                        printf("picked up pieced at: (%d,%d)\n", old_x, old_y);
                         
                     } else if (isPickedUp) {
                         
                         // calculate new position
-                        // mouseX = event.button.x;
-                        // mouseY = event.button.y;
                         int new_x = (event.button.x-5)/80;
                         int new_y = (event.button.y-5)/80;
                         new_x = bankers_round(new_x);
                         new_y = bankers_round(new_y);
 
                         //TODO: delete former Piece properly, fix this
-                        board[new_x][new_y] = new Piece(board[x][y], renderer);
+                        board[new_x][new_y] = new Piece(board[old_x][old_y], renderer);
                         board[new_x][new_y]->setCoordinates((80*new_x+5), (80*new_y+5));
                         board[new_x][new_y]->setRect((80*new_x+5), (80*new_y+5));
                         
-                        board[x][y] = nullptr;
-                        
-                        if (board[new_x][new_y] == nullptr) printf("board[%d][%d] is null, after nullifying board[%d][%d]\n", new_x, new_y, x, y);
+                        board[old_x][old_y] = nullptr;
                         
                         isPickedUp = false;
                     }

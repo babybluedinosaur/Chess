@@ -35,7 +35,7 @@ private:
     SDL_Renderer* renderer;
     TTF_Font* font;
     bool isPickedUp = false;
-    int offsetX, offsetY = 0;
+    int old_x, old_y = 0;
     Piece* selectedPiece = nullptr;
 
 public:
