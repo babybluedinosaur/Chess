@@ -5,7 +5,6 @@ Board::Board() {
     buildBoard(window, renderer, false);
 
     SDL_Event event;
-    int mouseX, mouseY;
     bool quit = false;
 
     while (!quit) {
@@ -30,7 +29,6 @@ Board::Board() {
                         isPickedUp = true;
                         old_x = x;
                         old_y = y;
-                        printf("picked up pieced at: (%d,%d)\n", old_x, old_y);
                         
                     } else if (isPickedUp) {
                         

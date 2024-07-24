@@ -48,7 +48,6 @@ void Piece::renderTexture(SDL_Renderer* renderer, SDL_Texture* tex, int x, int y
     renderQuad->y = y;
     renderQuad->h = 64;
     renderQuad->w = 64;
-    //TODO: renderQuad local?
     SDL_RenderCopy(renderer, tex, nullptr, renderQuad);
 }
 
