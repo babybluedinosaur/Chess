@@ -71,7 +71,7 @@ bool Board::initializeSDL() {
         return false;
     }
 
-    window = SDL_CreateWindow("SDL GUI Window", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
+    window = SDL_CreateWindow("Chess", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, 0);
     if (!window) {
         SDL_Log("Failed to create window: %s", SDL_GetError());
         SDL_Quit();
@@ -188,7 +188,6 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer, bool isCreate
     if (!isCreated) {
         for (int x = 0; x < 8; x++) {
             for (int y = 0; y < 8; y++) {
-                //black
                 if (y == 0) {
                     if(x == 0) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
                     if(x == 1) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
@@ -199,9 +198,13 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer, bool isCreate
                     if(x == 6) board[x][y] = new Knight(false, 80*x+5, 5,"black/black_knight.png", renderer);
                     if(x == 7) board[x][y] = new Rook(false, 80*x+5, 5,"black/black_rook.png", renderer);
 
-                } else if (y == 1) board[x][y] = new Pawn(false, 80*x+5, 85,"black/black_pawn.png", renderer);
-                //white
-                else if (y == 6) board[x][y] = new Pawn(true, 80*x+5, 485,"white/white_pawn.png", renderer);
+                } else if (y == 1) {
+                    board[x][y] = new Pawn(false, 80*x+5, 85,"black/black_pawn.png", renderer); 
+
+                } else if (y == 6) {
+                    board[x][y] = new Pawn(true, 80*x+5, 485,"white/white_pawn.png", renderer);
+
+                }
                 else if (y == 7) {
                     if(x == 0) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
                     if(x == 1) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
@@ -211,7 +214,10 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer, bool isCreate
                     if(x == 5) board[x][y] = new Bishop(true, 80*x+5, 565,"white/white_bishop.png", renderer);
                     if(x == 6) board[x][y] = new Knight(true, 80*x+5, 565,"white/white_knight.png", renderer);
                     if(x == 7) board[x][y] = new Rook(true, 80*x+5, 565,"white/white_rook.png", renderer);
-                } else board[x][y] = nullptr;
+                } else {
+                    board[x][y] = nullptr;
+
+                }
             }
         }
     } else {
@@ -219,6 +225,7 @@ void Board::buildBoard(SDL_Window* window, SDL_Renderer* renderer, bool isCreate
             for (int y = 0; y < 8; y++) {
                 if (board[x][y] != nullptr) {
                     board[x][y]->setImage(board[x][y]->getPath(), renderer);
+
                 }
             }
         }
